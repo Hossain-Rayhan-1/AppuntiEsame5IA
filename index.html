@@ -126,7 +126,7 @@ footer { text-align: center; color: #999; padding: 30px; font-size: 13px; }
 
 </main>
 
-<footer>Gli appunti sono salvati in questo browser. Usa "Backup" ogni tanto per non perderli. 🎓</footer>
+<footer>Gli appunti sono salvati in questo browser. Usa "Backup" e carica appunti.json su GitHub per averli ovunque. 🎓</footer>
 
 <script>
 const SUBJECTS = [
@@ -359,6 +359,9 @@ function deleteCurrent() {
   const n = notes.find(x => x.id === currentId);
   if (!n || !confirm('Eliminare "' + n.title + '"?')) return;
   notes = notes.filter(x => x.id !== currentId);
+  const del = loadDeleted();
+  del.push(currentId);
+  try { localStorage.setItem(KEY_DEL, JSON.stringify(del)); } catch (e) {}
   persist();
   closeReader();
 }
@@ -369,7 +372,7 @@ function exportBackup() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "appunti-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "appunti.json";
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
@@ -381,20 +384,14 @@ function importBackup(event) {
     try {
       const data = JSON.parse(reader.result);
       if (!Array.isArray(data)) throw new Error();
-      const valid = data.filter(n => n && n.title && n.content && SUBJECTS.some(s => s.name === n.subject))
-        .map(n => ({
-          id: n.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-          subject: n.subject,
-          title: String(n.title),
-          content: cleanKeepLinks(String(n.content).includes("<") ? String(n.content) : esc(String(n.content)).replace(/\n/g, "<br>")),
-          updated: n.updated || Date.now()
-        }));
-      const ids = new Set(notes.map(n => n.id));
-      const added = valid.filter(n => !ids.has(n.id));
-      notes = notes.concat(added);
+      const valid = normalizeList(data);
+      const ids = new Set(valid.map(n => n.id));
+      const del = loadDeleted().filter(id => !ids.has(id));
+      try { localStorage.setItem(KEY_DEL, JSON.stringify(del)); } catch (e) {}
+      const changed = mergeNotes(valid);
       persist();
       goHome();
-      alert("Importati " + added.length + " appunti.");
+      alert("Importati o aggiornati " + changed + " appunti.");
     } catch (e) {
       alert("File non valido.");
     }
@@ -403,7 +400,51 @@ function importBackup(event) {
   reader.readAsText(file);
 }
 
+/* ---------- unione con appunti.json (GitHub) ---------- */
+const KEY_DEL = "appunti-scuola-deleted";
+function loadDeleted() {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY_DEL));
+    return Array.isArray(d) ? d : [];
+  } catch (e) { return []; }
+}
+function normalizeList(data) {
+  return data.filter(n => n && n.title && n.content && SUBJECTS.some(s => s.name === n.subject))
+    .map(n => ({
+      id: n.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      subject: n.subject,
+      title: String(n.title),
+      content: cleanKeepLinks(String(n.content).includes("<") ? String(n.content) : esc(String(n.content)).replace(/\n/g, "<br>")),
+      updated: Number(n.updated) || Date.now()
+    }));
+}
+/* aggiunge i nuovi appunti e, se lo stesso appunto esiste già, tiene la versione più recente */
+function mergeNotes(list, skipDeleted) {
+  const del = skipDeleted ? new Set(loadDeleted()) : new Set();
+  let changed = 0;
+  list.forEach(n => {
+    if (del.has(n.id)) return;
+    const old = notes.find(x => x.id === n.id);
+    if (!old) { notes.push(n); changed++; }
+    else if (n.updated > old.updated) { Object.assign(old, n); changed++; }
+  });
+  return changed;
+}
+async function syncFromRepo() {
+  try {
+    const res = await fetch("appunti.json?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    if (mergeNotes(normalizeList(data), true) > 0) {
+      persist();
+      if (!document.getElementById("home").classList.contains("hidden")) renderHome();
+    }
+  } catch (e) { /* nessun appunti.json: va bene così */ }
+}
+
 renderHome();
+syncFromRepo();
 </script>
 </body>
 </html>
