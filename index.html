@@ -1,502 +1,409 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My School Drive</title>
-
+<title>I miei appunti</title>
 <style>
 * { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Inter, Arial, sans-serif;
-  background: #f5f6fa;
-  color: #202438;
-}
-
-header {
-  background: white;
-  padding: 22px 6%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e8eaf0;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.logo { font-size: 23px; font-weight: 800; }
+body { margin: 0; font-family: Inter, system-ui, Arial, sans-serif; background: #f5f6fa; color: #202438; }
+header { background: #fff; padding: 18px 6%; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #e8eaf0; position: sticky; top: 0; z-index: 5; }
+.logo { font-size: 22px; font-weight: 800; cursor: pointer; }
 .logo span { color: #7464e8; }
-
-button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 10px;
-  padding: 12px 17px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.primary {
-  background: #7464e8;
-  color: white;
-}
-
-.secondary {
-  background: #eeecff;
-  color: #6454d4;
-}
-
-main {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 22px;
-}
-
-.welcome {
-  margin-bottom: 28px;
-}
-
-.welcome h1 {
-  font-size: 30px;
-  margin-bottom: 8px;
-}
-
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+button { cursor: pointer; border: 0; border-radius: 10px; padding: 11px 16px; font-weight: 600; font-size: 14px; font-family: inherit; }
+.primary { background: #7464e8; color: #fff; }
+.primary:hover { background: #6454d4; }
+.secondary { background: #eeecff; color: #6454d4; }
+.danger { background: #ffecec; color: #d03a3a; }
+main { max-width: 1100px; margin: 30px auto 60px; padding: 0 20px; }
+h1 { font-size: 28px; margin: 0 0 6px; }
 .muted { color: #888da0; }
-
-.search {
-  width: 100%;
-  padding: 16px 20px;
-  border: 1px solid #e2e4ed;
-  border-radius: 13px;
-  font-size: 15px;
-  outline: none;
-  margin: 15px 0 30px;
-  background: white;
-}
-
+.search { width: 100%; padding: 15px 18px; border: 1px solid #e2e4ed; border-radius: 13px; font-size: 15px; outline: none; margin: 16px 0 26px; background: #fff; font-family: inherit; }
 .search:focus { border-color: #7464e8; }
-
-.subjects {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 17px;
-}
-
-.subject {
-  background: white;
-  padding: 23px;
-  border-radius: 17px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: .2s;
-}
-
-.subject:hover {
-  transform: translateY(-4px);
-  border-color: #c8c0ff;
-}
-
-.subject .emoji { font-size: 32px; }
-.subject h3 { margin-bottom: 5px; }
-.subject p { color: #888da0; font-size: 13px; }
-
-.section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 35px 0 18px;
-}
-
-.documents {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 15px;
-}
-
-.document {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.document:hover { box-shadow: 0 5px 20px #20243812; }
-
-.document .file { font-size: 26px; }
-.document h3 { font-size: 16px; }
-.document p { color: #888da0; font-size: 13px; }
-
+.subjects { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+.subject { padding: 22px; border-radius: 17px; cursor: pointer; border: 2px solid transparent; transition: .2s; }
+.subject:hover { transform: translateY(-4px); border-color: #c8c0ff; }
+.subject .emoji { font-size: 34px; }
+.subject h3 { margin: 8px 0 4px; }
+.subject p { margin: 0; color: #6b7086; font-size: 13px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 32px 0 16px; }
+.row h2, .row h1 { margin: 0; }
+.docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.doc { background: #fff; padding: 18px; border-radius: 14px; cursor: pointer; transition: .2s; border: 1px solid #eef0f6; }
+.doc:hover { box-shadow: 0 6px 20px #2024381a; }
+.doc .file { font-size: 24px; }
+.doc h3 { font-size: 16px; margin: 8px 0 4px; overflow-wrap: anywhere; }
+.doc p { color: #888da0; font-size: 13px; margin: 0 0 6px; overflow-wrap: anywhere; }
+.doc small { color: #aab; font-size: 12px; }
+.empty { color: #888da0; background: #fff; border-radius: 13px; padding: 25px; text-align: center; grid-column: 1/-1; }
 .hidden { display: none !important; }
-
-#reader {
-  background: white;
-  padding: 30px;
-  border-radius: 17px;
-  margin-top: 20px;
-}
-
-#reader h1 { margin-top: 20px; }
-
-#readerContent {
-  white-space: pre-wrap;
-  line-height: 1.9;
-  overflow-wrap: anywhere;
-  color: #44495b;
-  margin-top: 25px;
-}
-
-#readerContent a {
-  color: #6556dc;
-  overflow-wrap: anywhere;
-}
-
-#addPanel {
-  background: white;
-  border-radius: 16px;
-  padding: 25px;
-  margin-top: 30px;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 13px;
-  margin: 8px 0 17px;
-  border: 1px solid #e0e2ea;
-  border-radius: 9px;
-  font: inherit;
-}
-
-textarea { min-height: 160px; resize: vertical; }
-
+.card { background: #fff; border-radius: 17px; padding: 28px; margin-top: 18px; }
+.content { line-height: 1.8; overflow-wrap: anywhere; color: #33384a; margin-top: 18px; }
+.content a { color: #6556dc; }
+.content h2, .content h3 { margin: 22px 0 8px; }
 label { font-size: 13px; font-weight: 700; }
-
-.empty {
-  color: #888da0;
-  background: white;
-  border-radius: 13px;
-  padding: 25px;
-  text-align: center;
-  grid-column: 1/-1;
-}
-
-footer {
-  text-align: center;
-  color: #999;
-  padding: 40px;
-  font-size: 13px;
-}
-
-@media(max-width:600px) {
-  .welcome h1 { font-size: 24px; }
-  header { padding: 18px; }
-}
+input[type=text], select { width: 100%; padding: 12px; margin: 7px 0 16px; border: 1px solid #e0e2ea; border-radius: 9px; font: inherit; background: #fff; }
+.toolbar { display: flex; gap: 6px; flex-wrap: wrap; margin: 7px 0 0; padding: 8px; background: #f3f2ff; border-radius: 9px 9px 0 0; border: 1px solid #e0e2ea; border-bottom: 0; }
+.toolbar button { padding: 7px 11px; background: #fff; color: #44495b; border: 1px solid #e0e2ea; }
+.toolbar button:hover { background: #eeecff; }
+#editor { min-height: 280px; padding: 16px; border: 1px solid #e0e2ea; border-radius: 0 0 9px 9px; line-height: 1.8; outline: none; background: #fff; overflow-wrap: anywhere; margin-bottom: 18px; }
+#editor:focus { border-color: #7464e8; }
+#editor:empty:before { content: attr(data-placeholder); color: #aab; }
+footer { text-align: center; color: #999; padding: 30px; font-size: 13px; }
+@media(max-width:600px) { h1 { font-size: 23px; } header { padding: 14px 16px; } .card { padding: 20px; } }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">📚 My <span>School Drive</span></div>
-  <button class="primary" onclick="showAdd()">+ Nuovo appunto</button>
+  <div class="logo" onclick="goHome()">📚 I miei <span>appunti</span></div>
+  <div class="actions">
+    <button class="primary" onclick="newNote()">+ Nuovo appunto</button>
+    <button class="secondary" onclick="exportBackup()">⬇ Backup</button>
+    <button class="secondary" onclick="document.getElementById('importFile').click()">⬆ Importa</button>
+    <input type="file" id="importFile" accept=".json" class="hidden" onchange="importBackup(event)">
+  </div>
 </header>
 
 <main>
 
-<section id="home">
-  <div class="welcome">
+  <section id="home">
     <h1>I tuoi appunti, organizzati.</h1>
-    <p class="muted">Tutto il materiale scolastico in un unico posto.</p>
-  </div>
+    <p class="muted">Scegli un quaderno oppure cerca un appunto.</p>
+    <input class="search" id="homeSearch" placeholder="🔍 Cerca un appunto..." oninput="renderHome()">
+    <div class="subjects" id="subjects"></div>
+    <div class="row"><h2 id="homeListTitle">🕘 Ultimi appunti</h2><span class="muted" id="total"></span></div>
+    <div class="docs" id="homeDocs"></div>
+  </section>
 
-  <input
-    class="search"
-    id="search"
-    placeholder="🔍 Cerca un appunto per titolo..."
-    oninput="searchNotes()"
-  >
+  <section id="subjectPage" class="hidden">
+    <button class="secondary" onclick="goHome()">← Tutti i quaderni</button>
+    <div class="row"><h1 id="subjectTitle"></h1><button class="primary" onclick="newNote()">+ Aggiungi</button></div>
+    <input class="search" id="subjectSearch" placeholder="🔍 Cerca in questo quaderno..." oninput="renderSubject()" style="margin-top:0">
+    <div class="docs" id="subjectDocs"></div>
+  </section>
 
-  <h2>📁 Le mie materie</h2>
-  <div class="subjects" id="subjects"></div>
+  <section id="reader" class="hidden">
+    <div class="actions">
+      <button class="secondary" onclick="closeReader()">← Indietro</button>
+      <button class="primary" onclick="editCurrent()">✏️ Modifica</button>
+      <button class="danger" onclick="deleteCurrent()">🗑 Elimina</button>
+    </div>
+    <div class="card">
+      <p class="muted" id="readerSubject" style="margin-top:0"></p>
+      <h1 id="readerTitle"></h1>
+      <div class="content" id="readerContent"></div>
+    </div>
+  </section>
 
-  <div class="section-title">
-    <h2>📄 Tutti gli appunti</h2>
-    <span class="muted" id="total"></span>
-  </div>
-
-  <div class="documents" id="allDocuments"></div>
-</section>
-
-<section id="subjectPage" class="hidden">
-  <button class="secondary" onclick="goHome()">← Torna alle materie</button>
-  <div class="section-title">
-    <h1 id="subjectTitle"></h1>
-    <button class="primary" onclick="showAdd()">+ Aggiungi</button>
-  </div>
-  <div class="documents" id="subjectDocuments"></div>
-</section>
-
-<section id="reader" class="hidden">
-  <button class="secondary" onclick="goBack()">← Indietro</button>
-  <p class="muted" id="readerSubject"></p>
-  <h1 id="readerTitle"></h1>
-  <div id="readerContent"></div>
-</section>
-
-<section id="addPanel" class="hidden">
-  <div class="section-title">
-    <h2>✏️ Aggiungi un appunto</h2>
-    <button class="secondary" onclick="hideAdd()">Chiudi</button>
-  </div>
-
-  <form id="noteForm">
-    <label>Materia</label>
-    <select id="noteSubject" required>
-      <option value="Storia">Storia</option>
-      <option value="Italiano">Italiano</option>
-      <option value="TPSIT">TPSIT</option>
-      <option value="GPO">GPO</option>
-      <option value="SER">SER</option>
-      <option value="Informatica">Informatica</option>
-    </select>
-
-    <label>Titolo dell'appunto</label>
-    <input id="noteTitle" placeholder="Es. La Seconda Guerra Mondiale" required>
-
-    <label>Contenuto</label>
-    <textarea id="noteContent" placeholder="Scrivi qui i tuoi appunti..." required></textarea>
-
-    <button class="primary" type="submit">💾 Salva e scarica JSON</button>
-  </form>
-
-  <p class="muted">
-    Dopo aver salvato, sostituisci il file appunti.json nel tuo repository
-    GitHub con quello scaricato.
-  </p>
-</section>
+  <section id="editPage" class="hidden">
+    <div class="card" style="margin-top:0">
+      <h2 id="editHeading" style="margin-top:0"></h2>
+      <label>Materia</label>
+      <select id="noteSubject"></select>
+      <label>Titolo</label>
+      <input type="text" id="noteTitle" placeholder="Es. La Seconda Guerra Mondiale">
+      <label>Appunto</label>
+      <div class="toolbar">
+        <button onmousedown="event.preventDefault()" onclick="fmt('bold')"><b>B</b></button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('italic')"><i>I</i></button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('underline')"><u>U</u></button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('formatBlock','H2')">Titolo</button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('formatBlock','H3')">Sottotitolo</button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('formatBlock','P')">Testo</button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('insertUnorderedList')">• Elenco</button>
+        <button onmousedown="event.preventDefault()" onclick="fmt('insertOrderedList')">1. Elenco</button>
+        <button onmousedown="event.preventDefault()" onclick="addLink()">🔗 Link</button>
+      </div>
+      <div id="editor" contenteditable="true" data-placeholder="Scrivi qui i tuoi appunti..."></div>
+      <div class="actions">
+        <button class="primary" onclick="saveNote()">💾 Salva</button>
+        <button class="secondary" onclick="cancelEdit()">Annulla</button>
+      </div>
+    </div>
+  </section>
 
 </main>
 
-<footer>My School Drive · Il tuo spazio per studiare 🎓</footer>
+<footer>Gli appunti sono salvati in questo browser. Usa "Backup" ogni tanto per non perderli. 🎓</footer>
 
 <script>
-const subjects = [
-  {name:"Storia", emoji:"🏛️", color:"#fff0e5"},
-  {name:"Italiano", emoji:"📖", color:"#fceafa"},
-  {name:"TPSIT", emoji:"💻", color:"#e7f0ff"},
-  {name:"GPO", emoji:"📊", color:"#e8f8ee"},
-  {name:"SER", emoji:"🌐", color:"#fff5d9"},
-  {name:"Informatica", emoji:"🖥️", color:"#eeeaff"}
+const SUBJECTS = [
+  { name: "Storia",      emoji: "🏛️", color: "#fff0e5" },
+  { name: "Italiano",    emoji: "📖", color: "#fceafa" },
+  { name: "TPSIT",       emoji: "💻", color: "#e7f0ff" },
+  { name: "GPO",         emoji: "📊", color: "#e8f8ee" },
+  { name: "SER",         emoji: "🌐", color: "#fff5d9" },
+  { name: "Informatica", emoji: "🖥️", color: "#eeeaff" }
 ];
+const KEY = "appunti-scuola-v1";
 
-let notes = [];
+let notes = load();
 let currentSubject = null;
-let previousPage = "home";
+let currentId = null;
+let editingId = null;
+let cameFrom = "home";
 
-async function loadNotes() {
+/* ---------- salvataggio ---------- */
+function load() {
   try {
-    const response = await fetch("appunti.json");
-    if (!response.ok) throw new Error("JSON non trovato");
-    notes = await response.json();
-  } catch(error) {
-    notes = [];
-    console.warn("Non è stato possibile caricare appunti.json.", error);
-  }
-
-  render();
+    const data = JSON.parse(localStorage.getItem(KEY));
+    return Array.isArray(data) ? data : [];
+  } catch (e) { return []; }
+}
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify(notes)); }
+  catch (e) { alert("Impossibile salvare nel browser (memoria piena o navigazione privata). Fai un backup!"); }
 }
 
-function renderSubjects() {
-  const container = document.getElementById("subjects");
-  container.innerHTML = "";
-
-  subjects.forEach(subject => {
-    const count = notes.filter(n => n.subject === subject.name).length;
-
-    const card = document.createElement("div");
-    card.className = "subject";
-    card.style.background = subject.color;
-    card.innerHTML = `
-      <div class="emoji">${subject.emoji}</div>
-      <h3>${subject.name}</h3>
-      <p>${count} documenti · Apri quaderno →</p>
-    `;
-
-    card.onclick = () => openSubject(subject.name);
-    container.appendChild(card);
+/* ---------- pulizia HTML (sicurezza) ---------- */
+const ALLOWED = ["B","STRONG","I","EM","U","UL","OL","LI","H2","H3","P","BR","DIV","A"];
+function clean(html) {
+  const doc = new DOMParser().parseFromString("<body>" + html + "</body>", "text/html");
+  (function walk(node) {
+    [...node.childNodes].forEach(child => {
+      if (child.nodeType === 8) { child.remove(); return; }
+      if (child.nodeType !== 1) return;
+      const tag = child.tagName;
+      if (["SCRIPT","STYLE","IFRAME","OBJECT","EMBED"].includes(tag)) { child.remove(); return; }
+      walk(child);
+      if (!ALLOWED.includes(tag)) { child.replaceWith(...child.childNodes); return; }
+      [...child.attributes].forEach(a => child.removeAttribute(a.name));
+      if (tag === "A") { child.setAttribute("href", "#"); }
+    });
+  })(doc.body);
+  return doc.body.innerHTML;
+}
+/* i link vanno puliti mantenendo l'indirizzo http/https */
+function cleanKeepLinks(html) {
+  const doc = new DOMParser().parseFromString("<body>" + html + "</body>", "text/html");
+  const hrefs = [...doc.querySelectorAll("a")].map(a => a.getAttribute("href") || "");
+  const out = clean(html);
+  const d2 = new DOMParser().parseFromString("<body>" + out + "</body>", "text/html");
+  d2.querySelectorAll("a").forEach((a, i) => {
+    const h = hrefs[i] || "";
+    if (/^https?:\/\//i.test(h)) {
+      a.setAttribute("href", h);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    } else {
+      a.replaceWith(...a.childNodes);
+    }
   });
+  return d2.body.innerHTML;
+}
+function plain(html) {
+  const d = document.createElement("div");
+  d.innerHTML = clean(html);
+  return (d.textContent || "").replace(/\s+/g, " ").trim();
+}
+function esc(s) {
+  const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
 }
 
-function makeDocument(note) {
+/* ---------- viste ---------- */
+function show(id) {
+  ["home","subjectPage","reader","editPage"].forEach(s =>
+    document.getElementById(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+function goHome() {
+  currentSubject = null;
+  document.getElementById("homeSearch").value = "";
+  renderHome();
+  show("home");
+}
+
+function makeDoc(note) {
   const card = document.createElement("div");
-  card.className = "document";
-
-  const icon = document.createElement("div");
-  icon.className = "file";
-  icon.textContent = "📄";
-
-  const title = document.createElement("h3");
-  title.textContent = note.title;
-
-  const description = document.createElement("p");
-  description.textContent = note.subject;
-
-  card.append(icon, title, description);
-  card.onclick = () => openNote(note);
+  card.className = "doc";
+  const date = new Date(note.updated).toLocaleDateString("it-IT");
+  const prev = plain(note.content).slice(0, 90);
+  card.innerHTML =
+    '<div class="file">📄</div><h3>' + esc(note.title) + '</h3>' +
+    '<p>' + esc(prev || "(vuoto)") + '</p><small>' + esc(note.subject) + ' · ' + date + '</small>';
+  card.onclick = () => openNote(note.id);
   return card;
 }
-
-function renderDocuments(list, containerId) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-
-  if (list.length === 0) {
-    container.innerHTML = '<div class="empty">Nessun appunto trovato.</div>';
+function fillDocs(list, containerId) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  if (!list.length) {
+    c.innerHTML = '<div class="empty">Nessun appunto qui. Premi "+ Nuovo appunto" per iniziare.</div>';
     return;
   }
-
-  list.forEach(note => container.appendChild(makeDocument(note)));
+  list.forEach(n => c.appendChild(makeDoc(n)));
+}
+function matches(n, q) {
+  return !q || n.title.toLowerCase().includes(q) || plain(n.content).toLowerCase().includes(q);
+}
+function sorted(list) {
+  return [...list].sort((a, b) => b.updated - a.updated);
 }
 
-function render() {
-  renderSubjects();
-  renderDocuments(notes, "allDocuments");
-  document.getElementById("total").textContent =
-    notes.length + " documenti";
+function renderHome() {
+  const box = document.getElementById("subjects");
+  box.innerHTML = "";
+  SUBJECTS.forEach(s => {
+    const count = notes.filter(n => n.subject === s.name).length;
+    const el = document.createElement("div");
+    el.className = "subject";
+    el.style.background = s.color;
+    el.innerHTML = '<div class="emoji">' + s.emoji + '</div><h3>' + s.name +
+      '</h3><p>' + count + (count === 1 ? ' appunto' : ' appunti') + '</p>';
+    el.onclick = () => openSubject(s.name);
+    box.appendChild(el);
+  });
+  const q = document.getElementById("homeSearch").value.trim().toLowerCase();
+  const list = sorted(notes.filter(n => matches(n, q)));
+  document.getElementById("homeListTitle").textContent = q ? "🔍 Risultati" : "🕘 Ultimi appunti";
+  document.getElementById("total").textContent = notes.length + " in totale";
+  fillDocs(q ? list : list.slice(0, 12), "homeDocs");
 }
 
 function openSubject(name) {
   currentSubject = name;
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("reader").classList.add("hidden");
-  document.getElementById("subjectPage").classList.remove("hidden");
-
-  document.getElementById("subjectTitle").textContent = "📁 " + name;
-
-  const filtered = notes.filter(n => n.subject === name);
-  renderDocuments(filtered, "subjectDocuments");
+  document.getElementById("subjectSearch").value = "";
+  document.getElementById("subjectTitle").textContent =
+    SUBJECTS.find(s => s.name === name).emoji + " " + name;
+  renderSubject();
+  show("subjectPage");
+}
+function renderSubject() {
+  const q = document.getElementById("subjectSearch").value.trim().toLowerCase();
+  fillDocs(sorted(notes.filter(n => n.subject === currentSubject && matches(n, q))), "subjectDocs");
 }
 
-function openNote(note) {
-  previousPage = currentSubject ? "subject" : "home";
-
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("subjectPage").classList.add("hidden");
-  document.getElementById("reader").classList.remove("hidden");
-
-  document.getElementById("readerSubject").textContent = note.subject;
-  document.getElementById("readerTitle").textContent = note.title;
-
-  // Mostra il contenuto come testo sicuro, non come codice HTML.
-  const content = document.getElementById("readerContent");
-  content.replaceChildren();
-
-  const parts = note.content.split(/(https?:\/\/[^\s]+)/g);
-  parts.forEach(part => {
-    if (/^https?:\/\//.test(part)) {
-      try {
-        const url = new URL(part);
-        if (url.protocol === "https:" || url.protocol === "http:") {
-          const link = document.createElement("a");
-          link.href = url.href;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = part;
-          content.appendChild(link);
-        }
-      } catch {
-        content.appendChild(document.createTextNode(part));
-      }
-    } else {
-      content.appendChild(document.createTextNode(part));
-    }
-  });
+function openNote(id) {
+  const n = notes.find(x => x.id === id);
+  if (!n) return;
+  cameFrom = currentSubject ? "subjectPage" : "home";
+  currentId = id;
+  document.getElementById("readerSubject").textContent = n.subject;
+  document.getElementById("readerTitle").textContent = n.title;
+  document.getElementById("readerContent").innerHTML = cleanKeepLinks(n.content);
+  show("reader");
+}
+function closeReader() {
+  if (cameFrom === "subjectPage" && currentSubject) { renderSubject(); show("subjectPage"); }
+  else { renderHome(); show("home"); }
 }
 
-function goHome() {
-  currentSubject = null;
-  document.getElementById("subjectPage").classList.add("hidden");
-  document.getElementById("reader").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
+/* ---------- editor ---------- */
+function fillSelect(selected) {
+  const sel = document.getElementById("noteSubject");
+  sel.innerHTML = SUBJECTS.map(s =>
+    '<option value="' + s.name + '"' + (s.name === selected ? " selected" : "") + '>' + s.name + '</option>').join("");
 }
-
-function goBack() {
-  document.getElementById("reader").classList.add("hidden");
-
-  if (previousPage === "subject") {
-    document.getElementById("subjectPage").classList.remove("hidden");
-  } else {
-    document.getElementById("home").classList.remove("hidden");
-  }
+function newNote() {
+  editingId = null;
+  document.getElementById("editHeading").textContent = "✏️ Nuovo appunto";
+  fillSelect(currentSubject || SUBJECTS[0].name);
+  document.getElementById("noteTitle").value = "";
+  document.getElementById("editor").innerHTML = "";
+  show("editPage");
 }
-
-function searchNotes() {
-  const query = document.getElementById("search").value
-    .trim().toLowerCase();
-
-  const results = notes.filter(note =>
-    note.title.toLowerCase().includes(query)
-  );
-
-  renderDocuments(results, "allDocuments");
+function editCurrent() {
+  const n = notes.find(x => x.id === currentId);
+  if (!n) return;
+  editingId = n.id;
+  document.getElementById("editHeading").textContent = "✏️ Modifica appunto";
+  fillSelect(n.subject);
+  document.getElementById("noteTitle").value = n.title;
+  document.getElementById("editor").innerHTML = cleanKeepLinks(n.content);
+  show("editPage");
 }
-
-function showAdd() {
-  document.getElementById("addPanel").classList.remove("hidden");
-  document.getElementById("noteSubject").value =
-    currentSubject || "Storia";
-
-  document.getElementById("addPanel").scrollIntoView({
-    behavior:"smooth"
-  });
+function fmt(cmd, val) {
+  document.getElementById("editor").focus();
+  document.execCommand(cmd, false, val || null);
 }
-
-function hideAdd() {
-  document.getElementById("addPanel").classList.add("hidden");
+function addLink() {
+  const url = prompt("Incolla il link (https://...)");
+  if (url && /^https?:\/\//i.test(url.trim())) fmt("createLink", url.trim());
+  else if (url) alert("Il link deve iniziare con http:// o https://");
 }
-
-document.getElementById("noteForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  const newNote = {
-    subject: document.getElementById("noteSubject").value,
-    title: document.getElementById("noteTitle").value.trim(),
-    content: document.getElementById("noteContent").value.trim()
-  };
-
-  if (!newNote.title || !newNote.content) return;
-
-  const updatedNotes = [...notes, newNote];
-
-  // Genera il nuovo file JSON scaricabile.
-  const blob = new Blob(
-    [JSON.stringify(updatedNotes, null, 2)],
-    {type:"application/json"}
-  );
-
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "appunti.json";
-  link.click();
-
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-  notes = updatedNotes;
-  event.target.reset();
-  hideAdd();
-  render();
-
-  alert("Appunto aggiunto! Carica il nuovo appunti.json su GitHub per pubblicarlo.");
+document.getElementById("editor").addEventListener("paste", e => {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+  document.execCommand("insertText", false, text);
 });
 
-loadNotes();
-</script>
+function saveNote() {
+  const title = document.getElementById("noteTitle").value.trim();
+  const subject = document.getElementById("noteSubject").value;
+  const content = cleanKeepLinks(document.getElementById("editor").innerHTML);
+  if (!title) { alert("Scrivi un titolo."); return; }
+  if (!plain(content)) { alert("L'appunto è vuoto."); return; }
+  if (editingId) {
+    const n = notes.find(x => x.id === editingId);
+    Object.assign(n, { title, subject, content, updated: Date.now() });
+    currentId = n.id;
+  } else {
+    const n = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                subject, title, content, updated: Date.now() };
+    notes.push(n);
+    currentId = n.id;
+  }
+  persist();
+  currentSubject = subject;
+  openNote(currentId);
+  cameFrom = "subjectPage";
+}
+function cancelEdit() {
+  if (editingId) { openNote(editingId); }
+  else if (currentSubject) { renderSubject(); show("subjectPage"); }
+  else { goHome(); }
+}
+function deleteCurrent() {
+  const n = notes.find(x => x.id === currentId);
+  if (!n || !confirm('Eliminare "' + n.title + '"?')) return;
+  notes = notes.filter(x => x.id !== currentId);
+  persist();
+  closeReader();
+}
 
+/* ---------- backup ---------- */
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "appunti-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!Array.isArray(data)) throw new Error();
+      const valid = data.filter(n => n && n.title && n.content && SUBJECTS.some(s => s.name === n.subject))
+        .map(n => ({
+          id: n.id || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          subject: n.subject,
+          title: String(n.title),
+          content: cleanKeepLinks(String(n.content).includes("<") ? String(n.content) : esc(String(n.content)).replace(/\n/g, "<br>")),
+          updated: n.updated || Date.now()
+        }));
+      const ids = new Set(notes.map(n => n.id));
+      const added = valid.filter(n => !ids.has(n.id));
+      notes = notes.concat(added);
+      persist();
+      goHome();
+      alert("Importati " + added.length + " appunti.");
+    } catch (e) {
+      alert("File non valido.");
+    }
+    event.target.value = "";
+  };
+  reader.readAsText(file);
+}
+
+renderHome();
+</script>
 </body>
 </html>
